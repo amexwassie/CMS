@@ -1,0 +1,50 @@
+.navbar {
+  position: relative;
+  width: 100%;
+  background-color: #b739f1; /* Purple background */
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Ensure it stays on top */
+}
+
+.logo-container {
+    padding-top: 15px;
+  position: relative;
+  text-align: center; /* Center the logo and text */
+}
+
+.bank-logo {
+  height: 150px; /* Restrict the height */
+  width: auto; /* Maintain aspect ratio */
+}
+
+.overlay-text {
+  position: absolute;
+  top: 15%; /* Adjust position */
+  left: 22%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for centering */
+  color: yellow; /* Text color */
+  font-size: 1.5em; /* Adjust size as needed */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Add some shadow for visibility */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.links-container {
+  display: flex;
+  justify-content: flex-start; /* Align links to the left */
+  /* padding: 10px; Add some padding */
+
+}
+
+.links-container a {
+  margin-right: 20px; /* Space between links */
+  color: yellow; /* Link color */
+  text-decoration:#b739f1; /* Remove underline */
+}
+
+.links-container a:hover {
+  text-decoration:#0a0a0a; /* Add underline on hover */
+}

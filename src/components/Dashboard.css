@@ -1,0 +1,15 @@
+.dashboard {
+  padding: 20px;
+}
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.chart {
+  margin: 20px;
+  flex: 1 1 45%; /* Responsive size */
+  max-width: 500px; /* Max width for each chart */
+}
