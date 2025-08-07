@@ -11,7 +11,7 @@ const RackInfrastructureForm = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dataCenters, setDataCenters] = useState([]);
-
+  const [departments, setDepartments] = useState([]); // Departments state
   const navigate = useNavigate();
     
       const handleNext = (e) => {
@@ -76,12 +76,31 @@ const RackInfrastructureForm = () => {
     fetchDataCenters();
   }, []);
 
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/departments');
+      const data = await response.json();
+      setDepartments(data);
+    } catch (err) {
+      console.error('Failed to fetch departments:', err);
+    }
+  };
+
+  useEffect(() => { 
+    fetchRacks();
+    fetchDataCenters();
+    fetchDepartments(); // Fetch departments
+  }, []);
+
+
+
   // Handle input changes
   const handleChange = (index, field, value) => {
-    const updatedRacks = [...racks];
-    updatedRacks[index][field] = value;
-    setRacks(updatedRacks);
-  };
+  const updatedRacks = [...racks];
+  updatedRacks[index][field] = value;
+  setRacks(updatedRacks);
+};
 
   const saveRack = async (rack) => {
   try {
@@ -212,7 +231,13 @@ const RackInfrastructureForm = () => {
   {editingId === index ? (
     <select
       value={rack.dataCenterID}
-      onChange={(e) => handleChange(index, 'dataCenterID', e.target.value)}
+      onChange={(e) => {
+        const selectedDataCenterId = e.target.value;
+        const selectedDataCenter = dataCenters.find(dc => dc._id === selectedDataCenterId);
+        
+        handleChange(index, 'dataCenterID', selectedDataCenterId);
+        handleChange(index, 'upstreamDependency', selectedDataCenter ? selectedDataCenter.DCCode : '');
+      }}
     >
       <option value="">Select Data Center</option>
       {dataCenters.map(dc => (
@@ -390,32 +415,34 @@ const RackInfrastructureForm = () => {
                   )}
                 </td>
                 <td>
-                  {editingId === index ? (
-                    <select
-                      value={rack.responsibleTeam}
-                      onChange={(e) => handleChange(index, 'responsibleTeam', e.target.value)}
-                    >
-                      <option value="">Select Team</option>
-                      <option value="Data Center Team">Data Center Team</option>
-                      <option value="Facilities">Facilities</option>
-                      <option value="NOC">NOC</option>
-                    </select>
-                  ) : (
-                    rack.responsibleTeam || '-'
-                  )}
-                </td>
-                <td>
-                  {editingId === index ? (
-                    <input
-                      type="text"
-                      value={rack.upstreamDependency}
-                      onChange={(e) => handleChange(index, 'upstreamDependency', e.target.value)}
-                      placeholder="DC-001"
-                    />
-                  ) : (
-                    rack.upstreamDependency || '-'
-                  )}
-                </td>
+  {editingId === index ? (
+    <select
+      value={rack.responsibleTeam}
+      onChange={(e) => handleChange(index, 'responsibleTeam', e.target.value)}
+    >
+      <option value="">Select Team</option>
+      {departments.map(department => (
+        <option key={department.UnitID} value={department.unitName}>
+          {department.unitName}
+        </option>
+      ))}
+    </select>
+  ) : (
+    rack.responsibleTeam || '-'
+  )}
+</td>
+    <td>
+  {editingId === index ? (
+    <input
+      type="text"
+      value={rack.upstreamDependency}
+      readOnly // Make it uneditable
+      placeholder="Upstream Dependency"
+    />
+  ) : (
+    rack.upstreamDependency || '-'
+  )}
+</td>
                 <td>
                   {editingId === index ? (
                     <textarea
