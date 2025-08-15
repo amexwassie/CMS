@@ -13,6 +13,9 @@ export const RiskProvider = ({ children }) => {
     step7: {},
     step8: {},
     step9: {},
+     step10: {},
+    step11: {},
+    step12: {},
   });
 
   return (

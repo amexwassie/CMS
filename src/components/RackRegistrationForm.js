@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './MobileBankingAssetForm.css';
+
 
 const API_BASE_URL = 'http://localhost:5000/api/racks';
 
@@ -159,7 +159,7 @@ const RackInfrastructureForm = () => {
 
   return (
     <div className="asset-form">
-      <h2 style={{ color: '#800080' }}>Rack Infrastructure Registration</h2>
+      {/* <h2 style={{ color: '#800080' }}>Rack Infrastructure Registration</h2> */}
 
       <div className="search-bar">
         <label>Search Racks:</label>
@@ -170,7 +170,9 @@ const RackInfrastructureForm = () => {
           placeholder="Search by CI ID or Rack Name..."
         />
       </div>
-
+<button className="add-new-asset-btn" onClick={addRack}>
+          <i className="fas fa-plus"></i> Add New Rack
+        </button>
       <div style={{ overflowX: 'auto' }}>
         <table>
           <thead>
@@ -512,9 +514,7 @@ const RackInfrastructureForm = () => {
       </div>
 
       <div className="form-actions">
-        <button className="add-new-asset-btn" onClick={addRack}>
-          <i className="fas fa-plus"></i> Add New Rack
-        </button>
+        
        <div className="page-navigation">
           <button 
             className="navigation-btn" 

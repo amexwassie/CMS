@@ -21,11 +21,12 @@ const Navbar = () => {
         <Link to="/step4">Role List</Link>
         <Link to="/step5">DataCenter</Link>
         <Link to="/step6">Rack</Link>
-        <Link to="/step7">telecom </Link>
+        <Link to="/step7">Service_Provider </Link>
         <Link to="/step8">Network</Link>
-        <Link to="/step9">server</Link>
-        <Link to="/step10">application</Link>
-        <Link to="/step11">db</Link>
+        <Link to="/step9">Server</Link>
+        <Link to="/step10">Virtualization</Link>
+        <Link to="/step11">Application</Link>
+        <Link to="/step12">DB</Link>
         
         {/* Add links for other steps */}
       </div>

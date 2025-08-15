@@ -133,7 +133,10 @@ const DataCenterRegistrationForm = () => {
           placeholder="Search by name or location..."
         />
       </div>
-
+ <button className="add-new-asset-btn" onClick={addDataCenter}>
+          <i className="fas fa-plus"></i> Add New Data Center Information
+        </button>
+    
       <table>
         <thead>
           <tr>   
@@ -438,10 +441,7 @@ const DataCenterRegistrationForm = () => {
       </table>
 
       <div className="form-actions">
-        <button className="add-new-asset-btn" onClick={addDataCenter}>
-          <i className="fas fa-plus"></i> Add New Data Center Information
-        </button>
-    
+       
 
          <div className="page-navigation">
           <button 

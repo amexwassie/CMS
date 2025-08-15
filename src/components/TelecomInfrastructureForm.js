@@ -126,7 +126,9 @@ const TelecomInfrastructureForm = () => {
           placeholder="Search by CI ID or Service Name..."
         />
       </div>
-
+<button className="add-new-asset-btn" onClick={addTelecom}>
+          <i className="fas fa-plus"></i> Add New Telecom
+        </button>
       <div style={{ overflowX: 'auto' }}>
         <table>
           <thead>
@@ -431,9 +433,7 @@ const TelecomInfrastructureForm = () => {
       </div>
 
       <div className="form-actions">
-        <button className="add-new-asset-btn" onClick={addTelecom}>
-          <i className="fas fa-plus"></i> Add New Telecom
-        </button>
+        
       </div>
 
       {error && <div className="error">{error}</div>}
