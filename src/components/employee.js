@@ -4,7 +4,7 @@ import axios from 'axios';
 import './MobileBankingAssetForm.css';
 
 const API_BASE_URL = 'http://localhost:5000/api';
-const EMPLOYEES_ENDPOINT = '/employees';
+const EMPLOYEES_ENDPOINT = '/employee_information';
 
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE_URL = 'http://localhost:5000/api/network-devices';
+const API_BASE_URL = 'http://localhost:5000/api/networkdevices';
 
 const NetworkDeviceForm = () => {
   const [devices, setDevices] = useState([]);

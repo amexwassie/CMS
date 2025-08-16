@@ -6,6 +6,7 @@ const API_BASE_URL = 'http://localhost:5000/api/datacenters';
 
 const DataCenterRegistrationForm = () => {
   const [dataCenters, setDataCenters] = useState([]);
+  
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -44,20 +45,31 @@ const DataCenterRegistrationForm = () => {
   downstreamDependency: ''
 };
   // Fetch data centers from MongoDB
-  const fetchDataCenters = async () => {
-    try {
-      const response = await fetch(API_BASE_URL);
-      const data = await response.json();
-      setDataCenters(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+ const fetchDataCenters = async () => {
+  try {
+    const response = await fetch(API_BASE_URL);
+    const data = await response.json();
+    console.log('Fetched data:', data); // Log the fetched data
+    if (data.error) {
+      throw new Error(data.error); // Handle any error messages from the server
     }
-  };
+    if (Array.isArray(data)) {
+      setDataCenters(data);
+    } else {
+      setError('Unexpected response format');
+    }
+  } catch (err) {
+    console.error('Error fetching data centers:', err);
+    setError(err.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  useEffect(() => { fetchDataCenters(); }, []);
-
+  // Fetch data when the component mounts
+  useEffect(() => {
+    fetchDataCenters();
+  }, []);
   // Handle input changes
   const handleChange = (index, field, value) => {
   const updatedDataCenters = [...dataCenters];
