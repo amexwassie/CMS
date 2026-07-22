@@ -11,5 +11,5 @@
 .chart {
   margin: 20px;
   flex: 1 1 45%; /* Responsive size */
-  max-width: 500px; /* Max width for each chart */
+  max-width: 100px; /* Max width for each chart */
 }

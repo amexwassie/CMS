@@ -9,7 +9,7 @@ const Dashboard = ({ serviceData, criticalityData, valueData, typeData }) => {
       {/* Configuration Items Section */}
       <div className="section">
         <h2>Configuration Items</h2>
-        <div className="config-items">
+        <div className="config-items-grid">
           {[
             { id: 1, name: 'Business Process', count: 1 },
             { id: 2, name: 'Application Solution', count: 5 },
@@ -21,7 +21,7 @@ const Dashboard = ({ serviceData, criticalityData, valueData, typeData }) => {
           ].map(config => (
             <div key={config.id} className="config-card">
               <h3>{config.name}</h3>
-              <p className="count">{config.count}</p>
+              <div className="count">{config.count}</div>
               <button className="create-btn">+ Create</button>
             </div>
           ))}

@@ -1,141 +1,33 @@
-.login-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.modal-content {
   background: white;
-}
-
-.login-title {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #34495e;
-}
-
-.form-input {
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  max-width: 400px;
+  position: relative;
 }
 
-.form-input:focus {
-  border-color: #3498db;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-.form-hint {
-  font-size: 0.85rem;
-  color: #7f8c8d;
-  margin-top: 0.3rem;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.submit-btn:hover {
-  background-color: #2980b9;
-}
-
-.submit-btn:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
-}
-
-.auth-footer {
-  text-align: center;
-  margin-top: 1.5rem;
-  color: #7f8c8d;
-}
-
-.auth-toggle {
+.modal-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
   background: none;
   border: none;
-  color: #3498db;
+  font-size: 1.5rem;
   cursor: pointer;
-  font-weight: 600;
-  padding: 0 5px;
-}
-
-.auth-toggle:hover {
-  text-decoration: underline;
-}
-
-.error-message {
-  background-color: #ffecec;
-  color: #e74c3c;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  border-left: 4px solid #e74c3c;
-}
-
-.success-message {
-  background-color: #e8f7f0;
-  color: #27ae60;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  border-left: 4px solid #27ae60;
-}
-
-.password-info {
-  background-color: #f8f9fa;
-  border-left: 4px solid #3498db;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-}
-
-.password-info h3 {
-  margin-top: 0;
-  color: #2c3e50;
-}
-
-.password-info p {
-  margin: 8px 0;
-  color: #34495e;
-}
-
-.password-info strong {
-  color: #2c3e50;
-}
-
-.spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }

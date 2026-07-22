@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './com.css';
+import '../style/server.css';
 const ServerRegistrationForm = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('identification');
@@ -8,8 +8,8 @@ const ServerRegistrationForm = () => {
   // Initial form state
   const [formData, setFormData] = useState({
     // Identification
-    ciId: '',
-    ciName: '',
+    SerId: '',
+    SerName: '',
     hostname: '',
     ciType: '',
     manufacturer: '',
@@ -128,21 +128,21 @@ const ServerRegistrationForm = () => {
             <h3>1. Identification</h3>
             <div className="form-row">
               <div className="form-group">
-                <label>CI ID</label>
+                <label>Ser_ID</label>
                 <input 
                   type="text" 
-                  name="ciId" 
-                  value={formData.ciId} 
+                  name="SerID" 
+                  value={formData.SerID} 
                   onChange={handleChange}
                   placeholder="PHY-SRV-001"
                 />
               </div>
               <div className="form-group">
-                <label>CI Name</label>
+                <label>SerName</label>
                 <input 
                   type="text" 
-                  name="ciName" 
-                  value={formData.ciName} 
+                  name="SerName" 
+                  value={formData.SerName} 
                   onChange={handleChange}
                   placeholder="APP-SRV-01"
                 />
@@ -161,7 +161,7 @@ const ServerRegistrationForm = () => {
                 />
               </div>
               <div className="form-group">
-                <label>CI Type</label>
+                <label> Server Type</label>
                 <select name="ciType" value={formData.ciType} onChange={handleChange}>
                   <option value="">Select Type</option>
                   <option value="Rack Server">Rack Server</option>

@@ -462,13 +462,15 @@ const ClusterForm = ({ onCancel }) => {
 
 // Virtual Machines Section
 const VMsSection = ({ activeForm, setActiveForm }) => {
-  const [vms] = useState([
+  const [vms, setVms] = useState([
     { id: 'VM-001', name: 'APP-SRV-01', type: 'Application Server', os: 'Windows Server 2022', status: 'Active', cpu: 4, ram: 16, storage: 120 },
     { id: 'VM-002', name: 'DB-SRV-01', type: 'Database Server', os: 'RHEL 8', status: 'Active', cpu: 8, ram: 32, storage: 500 },
     { id: 'VM-003', name: 'WEB-SRV-01', type: 'Web Server', os: 'Ubuntu 20.04', status: 'Active', cpu: 2, ram: 8, storage: 50 },
     { id: 'VM-004', name: 'FILE-SRV-01', type: 'File Server', os: 'Windows Server 2019', status: 'Maintenance', cpu: 4, ram: 16, storage: 200 },
   ]);
-  
+   const addVM = (newVM) => {
+    setVms((prevVms) => [...prevVms, newVM]);
+  };
   return (
     <div className="section">
       <div className="section-header">
@@ -485,7 +487,7 @@ const VMsSection = ({ activeForm, setActiveForm }) => {
       </div>
       
       {activeForm === 'vm' ? (
-        <VMForm onCancel={() => setActiveForm('')} />
+        <VMForm onCancel={() => setActiveForm('')} addVM={addVM} />
       ) : (
         <div className="vm-table-container">
           <table className="vm-table">
@@ -545,34 +547,68 @@ const VMsSection = ({ activeForm, setActiveForm }) => {
   );
 };
 
-const VMForm = ({ onCancel }) => {
+const VMForm = ({ onCancel, addVM }) => {
   const [formData, setFormData] = useState({
-    ciId: 'VM-',
-    vmName: '',
+    Id: '', // Leave empty for generation on submission
+    name: '',
+    hostname: '', // Add if applicable
     ciType: 'Application VM',
     hypervisor: 'HV-001',
     cluster: 'CL-001',
-    ownerDept: '',
-    primaryOwner: '',
-    secondaryOwner: '',
-    vcpu: 2,
-    ram: 4,
-    diskSize: 50,
-    diskType: 'Thin Provisioned',
-    osName: '',
-    osVersion: '',
-    ipAddress: '',
-    vlan: '',
-    nicCount: 1,
-    snapshotPolicy: 'Daily',
-    backupStatus: 'Yes',
-    lastBackup: '',
-    businessCriticality: 'Medium',
-    slaImpact: '',
-    riskRating: 'Medium',
-    lifecycleStatus: 'Active',
-    commissionDate: '',
-    decommissionDate: ''
+    owner: {
+      department: '',
+      primary: {
+        name: '',
+        employeeId: '',
+        contact: ''
+      },
+      secondary: {
+        name: '',
+        contact: ''
+      }
+    },
+    technical: {
+      vCPU: 2,
+      ram: 4,
+      diskSize: 50,
+      diskType: 'Thin Provisioned',
+      os: {
+        name: '',
+        version: ''
+      },
+      ipAddresses: [],
+      vlanIds: [],
+      nicCount: 1,
+      snapshots: {
+        policy: 'Daily',
+        lastSnapshot: null
+      },
+      backups: {
+        status: false, // Change to boolean
+        lastBackup: null,
+        backupTool: ''
+      }
+    },
+    criticality: {
+      businessCriticality: 'Medium',
+      slaImpact: '',
+      riskRating: 'Medium'
+    },
+    status: {
+      lifecycle: 'Active',
+      commissionDate: Date.now(),
+      decommissionDate: null
+    },
+    monitoring: {
+      tool: '',
+      agentInstalled: false,
+      monitoringURL: ''
+    },
+    security: {
+      encrypted: false,
+      securityGroups: [],
+      compliance: []
+    }
   });
 
   const handleChange = (e) => {
@@ -580,6 +616,102 @@ const VMForm = ({ onCancel }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+   const handleSubmit = async () => {
+  if (formData.vmName && formData.vcpu && formData.ram) {
+const newVM = {
+  Id: `VM-${String(Date.now()).slice(-4)}`, // Ensure uniqueness or find an alternative method
+  Name: formData.Name,
+  hostname: formData.hostname,
+  ciType: formData.ciType,
+  hypervisor: formData.hypervisor,
+  cluster: formData.cluster || null,
+  owner: {
+    department: formData.department,
+    primary: {
+      name: formData.name,
+      employeeId: formData.primaryEmployeeId,
+      contact: formData.primaryContact
+    },
+    secondary: {
+      name: formData.secondaryOwner,
+      contact: formData.secondaryContact
+    }
+  },
+  technical: {
+    vCPU: formData.vcpu,
+    ram: formData.ram,
+    diskSize: formData.diskSize,
+    diskType: formData.diskType,
+    os: {
+      name: formData.osName,
+      version: formData.osVersion,
+      architecture: formData.osArchitecture
+    },
+    ipAddresses: formData.ipAddresses || [],
+    vlanIds: formData.vlanIds || [],
+    nicCount: formData.nicCount || 1,
+    snapshots: {
+      policy: formData.snapshotPolicy || null,
+      lastSnapshot: null
+    },
+    backups: {
+      status: formData.backupStatus || false,
+      lastBackup: null,
+      backupTool: formData.backupTool || null
+    }
+  },
+  dependencies: {
+    upstream: [],
+    downstream: []
+  },
+  criticality: {
+    businessCriticality: formData.businessCriticality || 'Medium',
+    slaImpact: formData.slaImpact || null,
+    riskRating: formData.riskRating || 'Medium'
+  },
+  status: {
+    lifecycle: 'Active',
+    commissionDate: Date.now(),
+    decommissionDate: null,
+    lastUpdated: Date.now()
+  },
+  monitoring: {
+    tool: formData.monitoringTool || null,
+    agentInstalled: formData.agentInstalled || false,
+    monitoringURL: formData.monitoringURL || null
+  },
+  security: {
+    encrypted: formData.encrypted || false,
+    securityGroups: formData.securityGroups || [],
+    compliance: formData.compliance || []
+  }
+};
+
+    try {
+      const response = await fetch('http://localhost:5000/api/virtualmachines', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newVM),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        addVM(data); // Add the VM to the state if the response is successful
+        onCancel(); // Close the form
+      } else {
+        console.error('Failed to register VM:', response.statusText);
+        alert('Failed to register VM. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while attempting to register the VM.');
+    }
+  } else {
+    alert("Please fill out all required fields.");
+  }
+};
   return (
     <div className="form-container vm-form">
       <div className="form-section">
@@ -855,13 +987,14 @@ const VMForm = ({ onCancel }) => {
               onChange={handleChange}
             />
           </div>
-        </div>
+       
          <button className="btn-cancel" onClick={onCancel}>
-          Cancel
-        </button>
-        <button className="btn-submit">
-          Create Virtual Machine
-        </button>
+        Cancel
+      </button>
+      <button className="btn-submit" onClick={handleSubmit}>
+        Create Virtual Machine
+      </button>
+ </div>
         {formData.lifecycleStatus === 'Retired' && (
           <div className="form-row">
             <div className="form-group">

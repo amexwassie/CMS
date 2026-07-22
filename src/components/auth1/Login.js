@@ -1,94 +1,127 @@
-import React, { useState } from 'react';
-// import { registerUser, loginUser } from './api';
-import { registerUser, loginUser } from '../../api';
-const LoginSystem = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    empId: '',
-    email: '',
-    password: '',
-    department: '',
-  });
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import bankLogo from 'E:/CMS/src/assets/images/bank-logo.jpg'; // Adjust the path as needed
+const API_BASE_URL = 'http://localhost:5000/api/employees';
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+const Login = () => {
+  const [employees, setEmployees] = useState([]);
+  const [formData, setFormData] = useState({ empId: '', department: '' });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({ empId: '', department: '' });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccessMessage('');
+  const navigate = useNavigate();
 
+  const fetchEmployees = async () => {
     try {
-      if (isLogin) {
-        const response = await loginUser({ empId: formData.empId, password: formData.password });
-        alert('Login successful!');
-        console.log(response.data);
-      } else {
-        await registerUser(formData);
-        setSuccessMessage('User created successfully! You can now sign in.');
-      }
+      const response = await fetch(API_BASE_URL);
+      if (!response.ok) throw new Error('Failed to fetch employees');
+      const data = await response.json();
+      setEmployees(data);
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setValidationErrors((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const validateForm = () => {
+    let valid = true;
+    const errors = { empId: '', department: '' };
+
+    if (!formData.empId) {
+      errors.empId = 'Employee ID is required.';
+      valid = false;
+    } else if (!employees.some(emp => emp.EMP_ID === formData.empId)) {
+      errors.empId = 'Employee ID does not exist.';
+      valid = false;
+    }
+
+    if (!formData.department) {
+      errors.department = 'Department is required.';
+      valid = false;
+    } else if (!employees.some(emp => emp.DEPARTMENT === formData.department)) {
+      errors.department = 'Department does not match any employee.';
+      valid = false;
+    }
+
+    const isValidCombination = employees.some(emp => emp.EMP_ID === formData.empId && emp.DEPARTMENT === formData.department);
+    if (!isValidCombination) {
+      errors.empId = `The Employee ID ${formData.empId} does not match with the selected department (${formData.department}).`;
+      valid = false;
+    }
+
+    setValidationErrors(errors);
+    return valid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    console.log('Login submitted:', formData);
+    navigate('/Dashboard');
+  };
+
+  const distinctDepartments = [...new Set(employees.map(emp => emp.DEPARTMENT))];
+
+  if (isLoading) return <div>Loading...</div>;
+
   return (
-    <div className="login-container">
-      <h2>{isLogin ? 'Employee Sign In' : 'Sign Up'}</h2>
-      {error && <div className="error-message">{error}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="empId"
-          value={formData.empId}
-          onChange={handleChange}
-          placeholder="Employee ID"
-          required
-        />
-        {!isLogin && (
-          <>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email Address"
-              required
-            />
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="auth-card p-4 border rounded shadow">
+         
+        <h2 className="text-center">
+          <img src={bankLogo} alt="Commercial Bank Logo" className="bank-logo" /> <br/>
+          CMS Login</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>EmpID:</label>
             <input
               type="text"
+              className="form-control"
+              name="empId"
+              value={formData.empId}
+              onChange={handleChange}
+              placeholder="Enter emp ID..."
+              required
+            />
+            {validationErrors.empId && <div className="text-danger">{validationErrors.empId}</div>}
+          </div>
+          <div className="form-group">
+            <label>Department:</label>
+            <select
+              className="form-control"
               name="department"
               value={formData.department}
               onChange={handleChange}
-              placeholder="Department"
               required
-            />
-          </>
-        )}
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required={isLogin}
-        />
-        <button type="submit">{isLogin ? 'Sign In' : 'Register'}</button>
-      </form>
-      <button onClick={() => setIsLogin((prev) => !prev)}>
-        {isLogin ? 'Don’t have an account? Sign Up' : 'Already have an account? Sign In'}
-      </button>
+            >
+              <option value="">Select department</option>
+              {distinctDepartments.map((dept, index) => (
+                <option key={index} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+            {validationErrors.department && <div className="text-danger">{validationErrors.department}</div>}
+          </div>
+          <button type="submit" className="btn btn-primary btn-block">Sign In</button>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default LoginSystem;
+export default Login;

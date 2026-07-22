@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, registerables } from 'chart.js';
-
-import './com.css';
-// import bankLogo from 'C:/Users/Aragawwassie/risk_assessment/src/assets/images/bank-logo.jpg';
 import Footer from './Footer';
-import Dashboard from './Dashboards'; // Import the Dashboard component
-import ConfigurationManagement from './ConfigurationManagement'; // Import ConfigurationManagement
+import Dashboard from './Dashboards';
+import ConfigurationManagement from './ConfigurationManagement';
+import BCDRDashboard from './BCDRDashboard';
+import ChangeManagement from './ChangeManagement';
+import ServiceDashboard from './ServiceDashboard';
+import '../style/welcome.css'; // Make sure you have this CSS import
 
 // Register Chart components
 ChartJS.register(...registerables);
@@ -19,11 +20,10 @@ const Welcome = () => {
   const navItems = [
     'Welcome',
     'Asset management',
-    // 'Helpdesk',
     'Change management',
     'Service management',
+    'BCDR Dashboard',
     'Data administration',
-    // 'Administration',
     'Configuration',
     'System'
   ];
@@ -101,12 +101,15 @@ const Welcome = () => {
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <div className="logo-container">
-          {/* <img src={bankLogo} alt="Bank Logo" className="bank-logo" /> */}
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <h1>Commercial Bank of Ethiopia</h1>
+          <div className="header-info">
+            <span>PARKPOZENJI</span>
+            <span>Economic China Offshore (CBE)</span>
+          </div>
         </div>
-        
         <div className="search-container">
           <input
             type="text"
@@ -116,59 +119,71 @@ const Welcome = () => {
             className="search-bar"
           />
         </div>
-        
-        <div className="nav-items">
-          {navItems.map((item, index) => (
-            <div 
-              key={index}
-              className={`navitem ${activeSection === (item === 'Welcome' ? 'dashboard' : item.toLowerCase().replace(/\s+/g, '-')) ? 'active' : ''}`}
-              onClick={() => handleNavClick(item)}
-            >
-              <div className="item-content">
-                {item}
+      </header>
+
+      <div className="main-layout">
+        {/* Sidebar Navigation */}
+        <nav className="sidebar">
+          <div className="nav-items">
+            {navItems.map((item, index) => (
+              <div 
+                key={index}
+                className={`nav-item ${activeSection === (item === 'Welcome' ? 'dashboard' : item.toLowerCase().replace(/\s+/g, '-')) ? 'active' : ''}`}
+                onClick={() => handleNavClick(item)}
+              >
+                <div className="item-content">
+                  {item}
+                </div>
               </div>
+            ))}
+          </div>
+          
+          <div className="user-info">
+            <div className="avatar">U</div>
+            <div className="user-details">
+              <div className="username">Admin User</div>
+              <div className="role">System Administrator</div>
             </div>
-          ))}
-        </div>
-        
-        <div className="user-info">
-          <div className="avatar">U</div>
-          <div className="user-details">
-            <div className="username">Admin User</div>
-            <div className="role">System Administrator</div>
           </div>
-        </div>
-        
+        </nav>
+
+        {/* Main Content */}
+        <main className="main-content">
+          {/* Dashboard Content */}
+          {activeSection === 'dashboard' && (
+            <Dashboard 
+              serviceData={serviceData}
+              criticalityData={criticalityData}
+              valueData={valueData}
+              typeData={typeData}
+            />
+          )}
+          
+          {/* Configuration Management Content */}
+          {activeSection === 'asset-management' && (
+            <ConfigurationManagement />
+          )}
+          
+          {/* BCDR Dashboard Content */}
+          {activeSection === 'bcdr-dashboard' && (
+            <BCDRDashboard />
+          )}
+           {/* change Dashboard Content */}
+          {activeSection === 'change-management' && (
+            <ChangeManagement/>
+          )}
+
+          {/* change Dashboard Content */}
+          {activeSection === 'service-management' && (
+            <ServiceDashboard/>
+          )}
+          
+          {/* Other sections would go here */}
+        </main>
       </div>
-      
-      {/* Main Content */}
-      <div className="main-content">
-        {/* Dashboard Content */}
-        {activeSection === 'dashboard' && (
-          <Dashboard 
-            serviceData={serviceData}
-            criticalityData={criticalityData}
-            valueData={valueData}
-            typeData={typeData}
-          />
-        )}
-        
-        {/* Configuration Management Content */}
-        {activeSection === 'asset-management' && (
-          <ConfigurationManagement />
-        )}
-        
-        {/* Helpdesk Content */}
-        {activeSection === 'helpdesk' && (
-          <div className="helpdesk-content">
-            <h1>Helpdesk Management</h1>
-            <p>Manage all helpdesk requests and tickets in this section.</p>
-          </div>
-        )}
-        
-        <Footer />
-      </div>
-      
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

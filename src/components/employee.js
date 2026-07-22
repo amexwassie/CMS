@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MobileBankingAssetForm.css';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-const EMPLOYEES_ENDPOINT = '/employee_information';
-
-
+// const API_BASE_URL = 'http://localhost:5000/api/employee_information';
+const API_BASE_URL = 'http://localhost:5000/api/employees';
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></link>
 
@@ -54,19 +52,19 @@ const EmployeeManagementForm = () => {
   };
 
   // Fetch employees from MongoDB - FIXED
-  const fetchEmployees = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${API_BASE_URL}${EMPLOYEES_ENDPOINT}`);
-      setEmployees(response.data);
-      setError(null);
-    } catch (err) {
-      setError(`Failed to load employees: ${err.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Fetch employees from MongoDB
+const fetchEmployees = async () => {
+  try {
+    setIsLoading(true);
+    const response = await axios.get(`${API_BASE_URL}`);
+    setEmployees(response.data);
+    setError(null);
+  } catch (err) {
+    setError(`Failed to load employees: ${err.message}`);
+  } finally {
+    setIsLoading(false);
+  }
+};
   useEffect(() => { 
     fetchEmployees(); 
   }, []);
@@ -84,15 +82,15 @@ const EmployeeManagementForm = () => {
       let response;
       if (employee._id) {
         response = await axios.put(
-          `${API_BASE_URL}${EMPLOYEES_ENDPOINT}/${employee._id}`, 
+          `${API_BASE_URL}/${employee._id}`, 
           employee
         );
       } else {
         response = await axios.post(
-          `${API_BASE_URL}${EMPLOYEES_ENDPOINT}`, 
+          `${API_BASE_URL}`, 
           employee
         );
-        // Update the employee in state with the new _id from backend
+        // Update theoyee in state with the new _id from backend
         const updatedEmployees = [...employees];
         updatedEmployees[index] = response.data;
         setEmployees(updatedEmployees);
@@ -106,7 +104,7 @@ const EmployeeManagementForm = () => {
   // Delete employee from MongoDB
   const deleteEmployee = async (id, index) => {
     try {
-      await axios.delete(`${API_BASE_URL}${EMPLOYEES_ENDPOINT}/${id}`);
+      await axios.delete(`${API_BASE_URL}/${id}`);
       // Remove from local state
       const updatedEmployees = [...employees];
       updatedEmployees.splice(index, 1);
@@ -146,7 +144,7 @@ const EmployeeManagementForm = () => {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}${EMPLOYEES_ENDPOINT}/upload`, 
+        `${API_BASE_URL}/upload`, 
         formData,
         {
           headers: {

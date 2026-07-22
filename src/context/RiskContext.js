@@ -4,7 +4,7 @@ export const RiskContext = createContext();
 
 export const RiskProvider = ({ children }) => {
   const [riskData, setRiskData] = useState({
-    step1: {},
+    Dashboard: {},
     step2: {},
     step3: {},
     step4: {},

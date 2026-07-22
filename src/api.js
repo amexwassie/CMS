@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/auth';
-
-export const registerUser = async (data) => {
-  return await axios.post(`${API_BASE_URL}/register`, data);
-};
-
-export const loginUser = async (data) => {
-  return await axios.post(`${API_BASE_URL}/login`, data);
+export const fetchDepartments = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/auth/departments'); // Correct endpoint
+    return response.data; // This should return an array of department names
+  } catch (error) {
+    console.error("Error fetching departments:", error);
+    throw error; // Rethrow to handle in the component
+  }
 };
